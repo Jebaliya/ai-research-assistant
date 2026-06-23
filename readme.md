@@ -1,65 +1,43 @@
 # AI Research Assistant
 
-An interactive Streamlit research assistant that allows authenticated users to upload documents, index them with a hybrid retrieval pipeline, and ask natural language questions over the uploaded content.
+A Streamlit-based research assistant that lets authenticated users upload documents, index them with a hybrid retrieval engine, and ask natural language questions against the uploaded content.
 
-## Features
+## What this project does
 
-- Secure login using `streamlit_authenticator` and `auth_config.yaml`
-- Upload PDF, DOCX, and TXT files
-- Automatic document chunking and indexing
-- Persistent Chroma vector store in `chroma_db/`
-- Hybrid retrieval combining vector search and BM25
-- Response generation with the Groq Gemini LLM
-- Agentic workflow mode with retrieval step transparency
-- Document comparison for side-by-side topic analysis
-- Evaluation metrics using ROUGE and relevance scoring
-- Optional trace logging through Langfuse
-- Docker and Docker Compose support
+- Loads PDF, DOCX, and TXT documents
+- Splits text into overlapping chunks
+- Stores chunks in a persistent Chroma vector database
+- Performs hybrid retrieval using Chroma embeddings and BM25
+- Generates answers with a Groq Gemini LLM
+- Supports an agentic workflow with step-by-step reasoning
+- Provides document comparison and evaluation scoring
+- Logs queries and uploads to Langfuse when configured
 
-## Repository Structure
+## Setup Instructions
 
-- `app.py` - Streamlit application entry point and UI logic
-- `auth_config.yaml` - authentication configuration and sample users
-- `.env` - environment variables for API keys and hosted services
-- `requirements.txt` - Python dependencies
-- `dockerfile` - Docker build definition
-- `docker-compose.yml` - local deployment orchestration
-- `chroma_db/` - persistent document embedding storage
-- `rag/` - retrieval-augmented generation modules
-  - `document_loader.py` - parse PDFs, DOCX, and TXT files
-  - `chunker.py` - split text into overlapping chunks
-  - `vector_store.py` - Chroma persistence and query wrapper
-  - `hybrid_search.py` - BM25 retrieval for lexical search
-  - `retriever.py` - combines vector and BM25 search results
-  - `llm.py` - Groq Gemini language model integration
-  - `agent.py` - stepwise research agent workflow
-  - `evaluator.py` - question-answer evaluation metrics
-  - `logger.py` - optional Langfuse trace logging
+### 1. Clone the repository
 
-## Requirements
+```bash
+git clone <repo-url>
+cd "AI Research Assistant"
+```
 
-- Python 3.10+
-- Streamlit
-- ChromaDB
-- Groq Python client
-- PyMuPDF
-- python-docx
-- python-dotenv
-- streamlit-authenticator
-- PyYAML
-- rank_bm25
-- rouge-score
-- langfuse
+### 2. Create and activate a Python virtual environment
 
-Install dependencies:
+```bash
+python -m venv .venv
+.venv\Scripts\activate.bat
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Configuration
+### 4. Configure environment variables
 
-1. Rename or copy `.env` if needed, then add your API keys:
+Create a `.env` file in the repository root with the following values:
 
 ```env
 GROQ_API_KEY=your_groq_api_key
@@ -68,13 +46,22 @@ LANGFUSE_SECRET_KEY=your_langfuse_secret_key
 LANGFUSE_HOST=https://jp.cloud.langfuse.com
 ```
 
-2. Update `auth_config.yaml` to add or modify authenticated users.
+### 5. Configure authentication
 
-> The repository includes example credentials for `admin` and `jayveer`.
+Update `auth_config.yaml` to add or modify your allowed users. The repository includes two example users:
 
-## Running Locally
+- `admin`
+- `jayveer`
 
-Activate your Python environment and run:
+Passwords are stored as bcrypt hashes in the file.
+
+### 6. Verify the Chroma database directory
+
+The app uses `chroma_db/` for persistent storage. The directory is created automatically when the app starts.
+
+## Running the app locally
+
+Start the Streamlit app:
 
 ```bash
 streamlit run app.py
@@ -84,37 +71,47 @@ Then open `http://localhost:8501` in your browser.
 
 ## Running with Docker
 
-Use Docker Compose to build and run the app:
+Build and run the container using Docker Compose:
 
 ```bash
 docker-compose up --build
 ```
 
-The service is exposed at `http://localhost:8501`.
+The service will be available at `http://localhost:8501`.
+
+## Application structure
+
+- `app.py` - main Streamlit UI and workflow
+- `auth_config.yaml` - login credentials and cookie settings
+- `.env` - API and service configuration
+- `requirements.txt` - Python dependencies
+- `dockerfile` - Docker image definition
+- `docker-compose.yml` - local deployment orchestration
+- `chroma_db/` - persistent vector store directory
+- `rag/` - retrieval-augmented generation modules
+  - `document_loader.py` - file parsing
+  - `chunker.py` - text chunking
+  - `vector_store.py` - Chroma persistence and query wrapper
+  - `hybrid_search.py` - BM25 lexical search
+  - `retriever.py` - combines retrieval signals
+  - `llm.py` - Groq Gemini integration
+  - `agent.py` - agent workflow logic
+  - `evaluator.py` - evaluation metrics for answers
+  - `logger.py` - optional Langfuse tracing
 
 ## Usage
 
-1. Log in with a configured username and password.
-2. Upload PDF, DOCX, or TXT files using the sidebar.
-3. Ask questions about uploaded documents using the chat input.
-4. Enable `Agentic Workflow` to see agent reasoning steps.
-5. Compare two uploaded documents on a topic in the sidebar.
-6. Review evaluation metrics after each query.
+1. Log in via the Streamlit login form.
+2. Upload one or more documents from the sidebar.
+3. Ask a question in the chat input field.
+4. View answer evaluation metrics in the sidebar.
+5. Enable `Agentic Workflow` for retrieval step details.
+6. Compare two uploaded documents using the `Compare Documents` panel.
 
 ## Notes
 
-- Uploaded documents are persisted in `chroma_db/` for reuse.
-- Missing `GROQ_API_KEY` will cause the app to display an API key error.
-- Document comparison reuses the same retrieval and LLM pipeline.
-- Langfuse is optional; tracing is skipped if keys are missing.
-
-## Troubleshooting
-
-- If login fails, check `auth_config.yaml` and authentication cookie settings.
-- If uploads fail, confirm supported file types: `.pdf`, `.docx`, `.txt`.
-- If the LLM fails, verify `GROQ_API_KEY` and network connectivity.
-- If Langfuse tracing fails, confirm `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST`.
-
-## License
-
-This repository does not include a license file. Add one before sharing or distributing the project.
+- Supported upload formats: `.pdf`, `.docx`, `.txt`
+- Document chunks are indexed and stored in `chroma_db/`
+- If `GROQ_API_KEY` is missing, the app shows an API key error
+- The comparison feature uses the same retrieval and LLM pipeline
+- Langfuse tracing is optional and only active when keys are present

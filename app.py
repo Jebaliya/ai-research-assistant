@@ -233,28 +233,28 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── AUTH ─────────────────────────────────────────────────────────────────────
-with open("auth_config.yaml") as file:
-    config = yaml.load(file, Loader=SafeLoader)
+# with open("auth_config.yaml") as file:
+#     config = yaml.load(file, Loader=SafeLoader)
 
-authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days']
-)
+# authenticator = stauth.Authenticate(
+#     config['credentials'],
+#     config['cookie']['name'],
+#     config['cookie']['key'],
+#     config['cookie']['expiry_days']
+# )
 
-try:
-    authenticator.login()
-except Exception as e:
-    st.error(f"Login error: {e}")
-    st.stop()
+# try:
+#     authenticator.login()
+# except Exception as e:
+#     st.error(f"Login error: {e}")
+#     st.stop()
 
-if st.session_state.get("authentication_status") is False:
-    st.error("Wrong username or password.")
-    st.stop()
-elif st.session_state.get("authentication_status") is None:
-    st.warning("Please log in to continue.")
-    st.stop()
+# if st.session_state.get("authentication_status") is False:
+#     st.error("Wrong username or password.")
+#     st.stop()
+# elif st.session_state.get("authentication_status") is None:
+#     st.warning("Please log in to continue.")
+#     st.stop()
 
 # ── SESSION STATE ─────────────────────────────────────────────────────────────
 if "chat_history" not in st.session_state:
@@ -298,7 +298,7 @@ with st.sidebar:
     name = st.session_state.get("name", "User")
     st.markdown(f'<div class="welcome-strip">👤 <strong>{name}</strong></div>',
                 unsafe_allow_html=True)
-    authenticator.logout("🚪 Logout", "sidebar")
+    # authenticator.logout("🚪 Logout", "sidebar")
 
     
     # Clear

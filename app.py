@@ -236,6 +236,14 @@ st.markdown("""
         border-radius: 8px;
         padding: 8px !important;
     }
+    /* Small metric values */
+    [data-testid="stMetric"] [data-testid="stMetricValue"] {
+    font-size: 16px !important;
+    }
+    [data-testid="stMetric"] [data-testid="stMetricLabel"] {
+    font-size: 11px !important;
+    }
+            
 </style>
 """, unsafe_allow_html=True)
 

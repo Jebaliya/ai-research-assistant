@@ -5,3 +5,8 @@ PyMuPDF
 python-docx
 python-dotenv
 groq
+streamlit-authenticator
+PyYAML
+rank_bm25
+rouge-score
+langfuse

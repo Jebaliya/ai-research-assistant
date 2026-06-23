@@ -1,0 +1,16 @@
+cookie:
+  expiry_days: 1
+  key: jayveer_secret_key_2025
+  name: research_auth
+credentials:
+  usernames:
+    admin:
+      email: admin@example.com
+      first_name: Admin
+      last_name: User
+      password: $2b$12$twT3lCuls8d5Bd0.13/BFuGHdWj3z9fiUOtrn7WSg6sQJmeUEUHuO
+    jayveer:
+      email: jayveer@example.com
+      first_name: Jayveer
+      last_name: Jebaliya
+      password: $2b$12$5GVGurORW56z7z6MIqu.IOe0Vpv5rV2U4J6ZejSPUoN7EcA2AZce2

@@ -10,3 +10,4 @@ PyYAML
 rank_bm25
 rouge-score
 langfuse
+reportlab

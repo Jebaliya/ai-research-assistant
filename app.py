@@ -12,6 +12,13 @@ from rag.llm import GeminiLLM
 from rag.agent import ResearchAgent
 from rag.evaluator import Evaluator
 from rag.logger import trace_query, trace_document_upload
+import io
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.units import mm
+from reportlab.lib import colors
+
 
 load_dotenv()
 
@@ -308,8 +315,47 @@ with st.sidebar:
         st.session_state.agent_steps = None
         st.session_state.comparison_result = None
         st.rerun()
-    st.markdown("---")
+          
+    # 8. Export Chat
 
+    if st.session_state.chat_history:
+        st.markdown("### 📥 Export")
+    
+    if st.button("📄 Export Chat PDF"):
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4,
+                                rightMargin=20*mm, leftMargin=20*mm,
+                                topMargin=20*mm, bottomMargin=20*mm)
+        styles = getSampleStyleSheet()
+        
+        user_style = ParagraphStyle('user', parent=styles['Normal'],
+                                     textColor=colors.HexColor('#1D4ED8'),
+                                     spaceAfter=4, fontName='Helvetica-Bold')
+        bot_style = ParagraphStyle('bot', parent=styles['Normal'],
+                                    textColor=colors.HexColor('#111827'),
+                                    spaceAfter=4)
+        
+        story = [Paragraph("AI Research Assistant — Chat Export", styles['Title']),
+                 Spacer(1, 10*mm)]
+        
+        for msg in st.session_state.chat_history:
+            if msg["role"] == "user":
+                story.append(Paragraph(f"You: {msg['content']}", user_style))
+            else:
+                story.append(Paragraph(f"Assistant: {msg['content']}", bot_style))
+            story.append(Spacer(1, 3*mm))
+        
+        doc.build(story)
+        buffer.seek(0)
+        
+        st.download_button(
+            label="⬇️ Download PDF",
+            data=buffer,
+            file_name="chat_export.pdf",
+            mime="application/pdf"
+        )
+
+    st.markdown("---")
 
     # 2. Upload
     st.markdown("### 📁 Documents")
@@ -410,6 +456,8 @@ with st.sidebar:
 
     st.markdown("---")
 
+
+
     # Agent steps
     if st.session_state.agent_steps:
         with st.expander("🤖 Agent Workflow Steps", expanded=True):
@@ -489,7 +537,6 @@ if st.session_state.comparison_result:
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# ── FIXED INPUT BAR ───────────────────────────────────────────────────────────
 # ── FIXED INPUT BAR ───────────────────────────────────────────────────────────
 question = st.chat_input("Ask a question about your documents…")
 

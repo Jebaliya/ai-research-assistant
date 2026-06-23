@@ -326,8 +326,8 @@ with st.sidebar:
           
     # 8. Export Chat
 
-    if st.session_state.chat_history:
-        st.markdown("### 📥 Export")
+    # if st.session_state.chat_history:
+    #     st.markdown("### 📥 Export")
     
     if st.button("📄 Export Chat PDF"):
         buffer = io.BytesIO()

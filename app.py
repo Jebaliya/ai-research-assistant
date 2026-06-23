@@ -15,7 +15,7 @@ from rag.logger import trace_query, trace_document_upload
 
 load_dotenv()
 
-st.set_page_config(page_title="AI Research Assistant", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="AI Research Assistant", layout="wide")
 
 # ── CSS ──────────────────────────────────────────────────────────────────────
 st.markdown("""

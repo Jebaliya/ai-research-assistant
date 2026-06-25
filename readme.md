@@ -1,4 +1,4 @@
-# 🤖 AI Research Assistant
+# AI Research Assistant
 
 > A Streamlit-based research assistant that lets authenticated users upload documents, index them with a hybrid retrieval engine, and ask natural language questions against the uploaded content.
 

@@ -6,7 +6,6 @@
 ![Streamlit](https://img.shields.io/badge/Streamlit-UI-red?logo=streamlit)
 ![ChromaDB](https://img.shields.io/badge/ChromaDB-VectorStore-green)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
-![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ---
 

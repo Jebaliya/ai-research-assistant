@@ -56,8 +56,39 @@ st.markdown("""
 
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
+    header {visibility: hidden; height: 0;}
     * { box-sizing: border-box; }
+
+    /* Keep the native sidebar expand/collapse control clickable and visible.
+       It must sit ABOVE our fixed-header bar, otherwise clicks on it are
+       swallowed by the fixed-header overlay once the sidebar is collapsed. */
+    [data-testid="collapsedControl"],
+    [data-testid="stSidebarCollapsedControl"] {
+        visibility: visible !important;
+        display: flex !important;
+        z-index: 1000001 !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    [data-testid="collapsedControl"] svg,
+    [data-testid="stSidebarCollapsedControl"] svg {
+        color: var(--text-primary) !important;
+        fill: var(--text-primary) !important;
+    }
+    [data-testid="collapsedControl"] button,
+    [data-testid="stSidebarCollapsedControl"] button {
+        background: var(--bg-elevated) !important;
+        border: 1px solid var(--border-strong) !important;
+        border-radius: var(--radius-sm) !important;
+    }
+    /* Native sidebar collapse button (the one inside the open sidebar) */
+    [data-testid="stSidebarCollapseButton"] {
+        z-index: 1000001 !important;
+        pointer-events: auto !important;
+    }
+    [data-testid="stSidebarCollapseButton"] svg {
+        color: var(--text-secondary) !important;
+    }
 
     html, body, .stApp {
         background-color: var(--bg-primary) !important;

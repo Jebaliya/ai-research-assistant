@@ -56,38 +56,40 @@ st.markdown("""
 
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden; height: 0;}
     * { box-sizing: border-box; }
 
-    /* Keep the native sidebar expand/collapse control clickable and visible.
-       It must sit ABOVE our fixed-header bar, otherwise clicks on it are
-       swallowed by the fixed-header overlay once the sidebar is collapsed. */
-    [data-testid="collapsedControl"],
-    [data-testid="stSidebarCollapsedControl"] {
-        visibility: visible !important;
-        display: flex !important;
-        z-index: 1000001 !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
+    /* We do NOT hide the native <header> element itself — doing so also
+       hides/breaks the sidebar expand-arrow that lives inside it in some
+       Streamlit versions. Instead we just make the header blend into the
+       dark background and hide the specific icons we don't want
+       (hamburger menu, deploy/toolbar, status widget, decoration bar),
+       leaving the collapse/expand control fully native and clickable. */
+    [data-testid="stHeader"] {
+        background: transparent !important;
+        box-shadow: none !important;
     }
-    [data-testid="collapsedControl"] svg,
-    [data-testid="stSidebarCollapsedControl"] svg {
-        color: var(--text-primary) !important;
-        fill: var(--text-primary) !important;
+    [data-testid="stToolbar"],
+    [data-testid="stToolbarActions"],
+    [data-testid="stStatusWidget"],
+    [data-testid="stHeaderActionElements"] {
+        visibility: hidden !important;
     }
+    [data-testid="stDecoration"] {
+        display: none !important;
+    }
+    /* Style the native collapse/expand arrow to match the dark theme,
+       without hiding or repositioning it. */
     [data-testid="collapsedControl"] button,
-    [data-testid="stSidebarCollapsedControl"] button {
+    [data-testid="stSidebarCollapseButton"] button,
+    [data-testid="baseButton-header"] {
         background: var(--bg-elevated) !important;
         border: 1px solid var(--border-strong) !important;
         border-radius: var(--radius-sm) !important;
     }
-    /* Native sidebar collapse button (the one inside the open sidebar) */
-    [data-testid="stSidebarCollapseButton"] {
-        z-index: 1000001 !important;
-        pointer-events: auto !important;
-    }
+    [data-testid="collapsedControl"] svg,
     [data-testid="stSidebarCollapseButton"] svg {
-        color: var(--text-secondary) !important;
+        color: var(--text-primary) !important;
+        fill: var(--text-primary) !important;
     }
 
     html, body, .stApp {
@@ -221,7 +223,7 @@ st.markdown("""
     /* ── Fixed header ── */
     .fixed-header {
         position: fixed;
-        top: 0; left: 0; right: 0;
+        top: 2.875rem; left: 0; right: 0;
         background: rgba(10, 10, 11, 0.85);
         backdrop-filter: blur(10px);
         border-bottom: 1px solid var(--border-subtle);
@@ -253,7 +255,7 @@ st.markdown("""
 
     /* ── Chat area ── */
     .chat-wrapper {
-        margin-top: 92px;
+        margin-top: 138px;
         margin-bottom: 110px;
         padding: 0 16px;
         max-width: 760px;
